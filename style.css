@@ -13,7 +13,13 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: #333;
-  background-color: #f5f5f5;
+  background-color: #ff9a8b;
+  background-image: linear-gradient(
+    90deg,
+    #ff9a8b 0%,
+    #ff6a88 55%,
+    #ff99ac 100%
+  );
 }
 
 header {
@@ -24,7 +30,7 @@ header {
 }
 
 header h1 {
-  font-weight: 300;
+  font-weight: 900;
   margin-left: 10px;
 }
 
@@ -39,9 +45,10 @@ header h1 {
   font-size: 18px;
   margin-bottom: 20px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 5px;
   outline: none;
+  background: transparent;
 }
 
 .form-input-filter {
@@ -51,11 +58,14 @@ header h1 {
   margin-bottom: 20px;
   padding: 10px;
   border: none;
-  border-bottom: 1px solid #ccc;
+  color: #000;
+  border-bottom: 1px solid #000;
   background: transparent;
   outline: none;
 }
-
+.form-input-filter::placeholder {
+  color: #000;
+}
 .btn {
   background-color: #333;
   color: #fff;
@@ -84,9 +94,10 @@ header h1 {
   margin-top: 20px;
   width: 100%;
   font-size: 16px;
+  font-weight: 900;
   background-color: transparent;
-  color: #333;
-  border: 1px solid #ccc;
+  color: #000;
+  border: 1px solid #000;
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
@@ -95,7 +106,6 @@ header h1 {
 
 .btn-clear:hover {
   transform: translateY(-5px);
-  background-color: #f1f1f1;
 }
 
 .text-red {
@@ -112,7 +122,7 @@ header h1 {
   display: flex;
   justify-content: space-between;
   width: 45%;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 5px;
   padding: 10px 15px;
   margin: 0 5px 20px;
