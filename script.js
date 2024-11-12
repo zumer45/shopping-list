@@ -1,93 +1,74 @@
-const itemForm = document.querySelector("#item-form");
-const itemInput = document.querySelector("#item-input");
-const itemList = document.querySelector("#item-list");
-const clearBtn = document.querySelector(".btn-clear");
-const filterInput = document.querySelector(".filter");
+function addItem() {
+  const itemForm = document.querySelector("#item-form");
+  const seen = {};
 
-function addItem(e) {
-  e.preventDefault();
-  const formData = new FormData(itemForm);
-  const data = formData.get("item");
+  itemForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const itemList = document.querySelector("#item-list");
+    const formData = new FormData(itemForm);
+    let item = formData.get("item");
 
-  if (itemInput.value === "") {
-    alert("Please Enter A Value");
-    return;
-  }
+    if (item === "") {
+      alert("Please Enter A Value");
+      return;
+    }
 
-  const li = document.createElement("li");
+    if (seen[item]) {
+      alert("Can't add the same item twice");
+      return;
+    } else {
+      seen[item] = true;
+    }
 
-  li.appendChild(document.createTextNode(data));
+    const wasAdded = updateLocalStorage(item);
 
-  const button = createBtn("remove-item btn-link text-red");
-  li.appendChild(button);
+    const li = document.createElement("li");
+    const btn = createBtn("remove-item btn-link text-red");
+    li.appendChild(document.createTextNode(item));
+    li.appendChild(btn);
 
-  itemList.appendChild(li);
-
-  console.log(checkUI());
-
-  itemInput.value = "";
+    itemList.appendChild(li);
+    itemForm.reset();
+  });
 }
 
-function createBtn(classes) {
+function createBtn(className) {
   const btn = document.createElement("button");
-  btn.className = classes;
+  btn.className = className;
+
   const icon = createIcon("fa-solid fa-xmark");
   btn.appendChild(icon);
   return btn;
 }
 
-function createIcon(classes) {
+function createIcon(className) {
   const icon = document.createElement("i");
-  icon.className = classes;
+  icon.className = className;
   return icon;
 }
 
-function removeItems(e) {
-  if (e.target.parentElement.classList.contains("remove-item")) {
-    if (confirm("Are you sure")) {
-      e.target.parentElement.parentElement.remove();
-      checkUI();
-    }
-  }
+function updateLocalStorage(item) {
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+  items.push(item);
+  localStorage.setItem("items", JSON.stringify(items));
 }
 
-function removeAllItems(e) {
-  const children = itemList.children;
-  Array.from(children).forEach((child) => {
-    child.remove();
-  });
-  checkUI();
+function getItemsFromLocalStorage() {
+  let items = JSON.parse(localStorage.getItem("items"));
+  return items;
 }
 
-function checkUI() {
-  const items = itemList.querySelectorAll("li");
+function removeItem() {
+  const itemList = document.querySelector("#item-list");
 
-  if (items.length === 0) {
-    filterInput.style.display = "none";
-    clearBtn.style.display = "none";
-  } else {
-    filterInput.style.display = "block";
-    clearBtn.style.display = "block";
-  }
-}
-
-function filterItems(e) {
-  const value = e.target.value;
-
-  const items = itemList.querySelectorAll("li");
-
-  items.forEach((item) => {
-    if (item.textContent.toLowerCase().indexOf(value) !== -1) {
-      item.style.display = "flex";
-    } else {
-      item.style.display = "none";
+  itemList.addEventListener("click", (e) => {
+    if (e.target.parentElement.classList.contains("remove-item")) {
+      if (confirm("Are you sure")) {
+        e.target.parentElement.parentElement.remove();
+      }
     }
   });
 }
 
-itemForm.addEventListener("submit", addItem);
-itemList.addEventListener("click", removeItems);
-clearBtn.addEventListener("click", removeAllItems);
-filterInput.addEventListener("input", filterItems);
-
-checkUI();
+addItem();
+removeItem();
